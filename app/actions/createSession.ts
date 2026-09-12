@@ -28,6 +28,39 @@ export async function createSession(
   }
 
   const supabase = createServiceClient();
+  const trimmedName = customerName.trim();
+
+  // 1. Kiểm tra xem khách hàng có cùng tên đang có phiên chạy (active) hay không
+  // Rất hữu ích cho iOS Camera app / Zalo private webview khi bị xóa bộ nhớ đệm
+  const { data: existingActive } = await supabase
+    .from("sessions")
+    .select("id, order_code")
+    .eq("status", "active")
+    .ilike("customer_name", trimmedName)
+    .order("check_in_time", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existingActive) {
+    try {
+      const cookieStore = await cookies();
+      cookieStore.set("active_session_id", existingActive.id, {
+        path: "/",
+        maxAge: 60 * 60 * 24, // 24 hours
+        sameSite: "lax",
+        secure: true,
+        httpOnly: false,
+      });
+    } catch (e) {
+      console.error("Failed to set session cookie:", e);
+    }
+
+    return {
+      success: true,
+      sessionId: existingActive.id,
+      orderCode: existingActive.order_code,
+    };
+  }
 
   // Sinh mã đơn, retry nếu trùng (cực hiếm)
   let orderCode = generateOrderCode();
@@ -39,7 +72,7 @@ export async function createSession(
       .from("sessions")
       .insert({
         order_code: orderCode,
-        customer_name: customerName.trim(),
+        customer_name: trimmedName,
         status: "active",
         check_in_time: new Date().toISOString(),
       })
@@ -53,6 +86,7 @@ export async function createSession(
           path: "/",
           maxAge: 60 * 60 * 24, // 24 hours
           sameSite: "lax",
+          secure: true,
           httpOnly: false,
         });
       } catch (e) {

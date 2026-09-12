@@ -85,7 +85,7 @@ export default function SessionPage({ params }: PageProps) {
         if (data.status === "completed" || data.status === "cancelled") {
           if (typeof window !== "undefined") {
             localStorage.removeItem("active_session_id");
-            document.cookie = "active_session_id=; path=/; max-age=0";
+            document.cookie = "active_session_id=; path=/; max-age=0; Secure";
           }
           window.location.href = `/session/${sessionId}/summary`;
           return;
@@ -93,7 +93,7 @@ export default function SessionPage({ params }: PageProps) {
 
         if (typeof window !== "undefined") {
           localStorage.setItem("active_session_id", data.id);
-          document.cookie = `active_session_id=${data.id}; path=/; max-age=86400; SameSite=Lax`;
+          document.cookie = `active_session_id=${data.id}; path=/; max-age=86400; SameSite=Lax; Secure`;
         }
 
         setSession(data as SessionData);

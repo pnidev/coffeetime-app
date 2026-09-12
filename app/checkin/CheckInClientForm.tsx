@@ -34,14 +34,14 @@ export default function CheckInClientForm() {
         if (data && data.status === "active") {
           // Ghi đè đồng bộ lại cả 2 nơi cho chắc chắn
           localStorage.setItem("active_session_id", savedSessionId!);
-          document.cookie = `active_session_id=${savedSessionId!}; path=/; max-age=86400; SameSite=Lax`;
+          document.cookie = `active_session_id=${savedSessionId!}; path=/; max-age=86400; SameSite=Lax; Secure`;
 
           // Phiên vẫn đang chạy -> chuyển khách về màn hình tính giờ ngay!
           window.location.href = `/session/${savedSessionId}`;
         } else {
           // Phiên đã xong hoặc không tồn tại -> xóa bộ nhớ đệm
           localStorage.removeItem("active_session_id");
-          document.cookie = "active_session_id=; path=/; max-age=0";
+          document.cookie = "active_session_id=; path=/; max-age=0; Secure";
         }
       } catch {
         // Lỗi kết nối -> giữ nguyên
@@ -86,7 +86,7 @@ export default function CheckInClientForm() {
 
       if (typeof window !== "undefined" && result.sessionId) {
         localStorage.setItem("active_session_id", result.sessionId);
-        document.cookie = `active_session_id=${result.sessionId}; path=/; max-age=86400; SameSite=Lax`;
+        document.cookie = `active_session_id=${result.sessionId}; path=/; max-age=86400; SameSite=Lax; Secure`;
       }
 
       window.location.href = `/session/${result.sessionId}`;
