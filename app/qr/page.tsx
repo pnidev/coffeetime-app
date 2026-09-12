@@ -1,26 +1,17 @@
+"use client";
 // app/qr/page.tsx
 // Trang tạo & in QR code tĩnh — chỉ cần chạy 1 lần, in ra đặt tại quầy
-// Protected: chỉ accessible sau khi đã đăng nhập nhân viên
 
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import QrDisplay from "./QrDisplay";
+import { useEffect, useState } from "react";
 
-export const metadata = {
-  title: "Mã QR Quán — CoffeeShop",
-};
+export default function QrPage() {
+  const [checkinUrl, setCheckinUrl] = useState("");
 
-export default async function QrPage() {
-  // Kiểm tra auth nhân viên
-  const cookieStore = await cookies();
-  const auth = cookieStore.get("staff_auth");
-  if (auth?.value !== "authenticated") {
-    redirect("/staff/login?from=/qr");
-  }
-
-  const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const checkinUrl = `${appUrl}/checkin`;
+  useEffect(() => {
+    const origin = window.location.origin;
+    setCheckinUrl(`${origin}/checkin`);
+  }, []);
 
   return (
     <main
