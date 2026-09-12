@@ -222,12 +222,12 @@ export default function SessionPage({ params }: PageProps) {
       {/* Floating White Card — Chuẩn 100% tinh tế, không rườm rà */}
       <div className="card-floating animate-slide-up">
         {/* Top Header Row */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-          <div>
-            <h1 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#111827", lineHeight: 1.2, margin: 0 }}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "24px" }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <h1 style={{ fontSize: "1.35rem", fontWeight: 700, color: "#111827", lineHeight: 1.2, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               CoffeeShop
             </h1>
-            <p style={{ fontSize: "0.88rem", color: "#6b7280", fontWeight: 500, marginTop: "2px", marginBottom: 0 }}>
+            <p style={{ fontSize: "0.85rem", color: "#6b7280", fontWeight: 500, marginTop: "2px", marginBottom: 0 }}>
               Đã check-in
             </p>
           </div>
@@ -238,19 +238,19 @@ export default function SessionPage({ params }: PageProps) {
                 backgroundColor: "#fffbe5",
                 color: "#b45309",
                 border: "1px solid #fde68a",
-                padding: "5px 12px",
+                padding: "6px 12px",
                 borderRadius: "9999px",
-                fontSize: "0.78rem",
+                fontSize: "0.75rem",
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "5px",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
                 cursor: "pointer",
               }}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#d97706" }} />
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#d97706", flexShrink: 0 }} />
               Mất kết nối ⓘ
             </button>
           ) : (
@@ -259,38 +259,39 @@ export default function SessionPage({ params }: PageProps) {
                 backgroundColor: "#dcfce7",
                 color: "#15803d",
                 border: "1px solid #bbf7d0",
-                padding: "5px 13px",
+                padding: "6px 12px",
                 borderRadius: "9999px",
-                fontSize: "0.78rem",
+                fontSize: "0.75rem",
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "5px",
                 whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#16a34a" }} />
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#16a34a", flexShrink: 0 }} />
               Đang tính giờ
             </div>
           )}
         </div>
 
-        {/* Time & Money Metric Columns — Chỉnh lại font vừa vặn, tinh tế */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "24px" }}>
-          <div>
-            <p style={{ fontSize: "0.85rem", color: "#6b7280", fontWeight: 500, marginBottom: "6px" }}>
+        {/* Time & Money Metric Columns — Chuẩn chỉnh không bao giờ bị rớt dòng */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", marginBottom: "24px" }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <p style={{ fontSize: "0.82rem", color: "#6b7280", fontWeight: 500, marginBottom: "4px", whiteSpace: "nowrap" }}>
               Thời gian đã dùng
             </p>
-            <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "#111827", lineHeight: 1, letterSpacing: "-0.01em" }}>
+            <p style={{ fontSize: "1.25rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
               {durationDisplay}
             </p>
           </div>
 
-          <div style={{ textAlign: "right" }}>
-            <p style={{ fontSize: "0.85rem", color: "#6b7280", fontWeight: 500, marginBottom: "6px", textAlign: "right" }}>
+          <div style={{ textAlign: "right", minWidth: 0, flex: 1 }}>
+            <p style={{ fontSize: "0.82rem", color: "#6b7280", fontWeight: 500, marginBottom: "4px", textAlign: "right", whiteSpace: "nowrap" }}>
               Số tiền
             </p>
-            <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "#111827", lineHeight: 1, letterSpacing: "-0.01em", textAlign: "right" }}>
+            <p style={{ fontSize: "1.25rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", textAlign: "right", whiteSpace: "nowrap" }}>
               {formatCurrency(previewPrice)}
             </p>
           </div>
