@@ -5,12 +5,12 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { formatCurrency, formatDurationDisplay } from "@/lib/pricing";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { ClearActiveSession } from "./ClearActiveSession";
 
 interface PageProps {
   params: Promise<{ sessionId: string }>;
 }
-
-import { ClearActiveSession } from "./ClearActiveSession";
 
 export default async function SummaryPage({ params }: PageProps) {
   const { sessionId } = await params;
@@ -24,6 +24,13 @@ export default async function SummaryPage({ params }: PageProps) {
 
   if (error || !session) {
     notFound();
+  }
+
+  if (session.status !== "active") {
+    try {
+      const cookieStore = await cookies();
+      cookieStore.delete("active_session_id");
+    } catch {}
   }
 
   // Nếu session vẫn active → redirect về trang đếm giờ

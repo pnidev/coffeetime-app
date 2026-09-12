@@ -4,6 +4,7 @@
 
 import { createServiceClient } from "@/lib/supabase/server";
 import { calculatePrice } from "@/lib/pricing";
+import { cookies } from "next/headers";
 
 interface EndSessionInput {
   sessionId: string;
@@ -25,6 +26,14 @@ export async function endSession(
 
   if (!sessionId) {
     return { success: false, error: "Session ID không hợp lệ." };
+  }
+
+  // Clear cookie
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("active_session_id");
+  } catch (e) {
+    console.error("Failed to delete session cookie:", e);
   }
 
   const supabase = createServiceClient();

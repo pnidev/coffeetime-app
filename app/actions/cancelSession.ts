@@ -4,6 +4,7 @@
 // Server Action: Hủy phiên ngồi & ghi nhận 0đ vào Database (Hoạt động 100% trên mọi DB)
 
 import { createServiceClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 
 interface CancelSessionInput {
   sessionId: string;
@@ -24,6 +25,14 @@ export async function cancelSession(
 
   if (!sessionId) {
     return { success: false, error: "Session ID không hợp lệ." };
+  }
+
+  // Clear cookie
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("active_session_id");
+  } catch (e) {
+    console.error("Failed to delete session cookie:", e);
   }
 
   const supabase = createServiceClient();

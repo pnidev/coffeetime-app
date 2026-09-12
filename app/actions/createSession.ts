@@ -4,6 +4,7 @@
 
 import { createServiceClient } from "@/lib/supabase/server";
 import { generateOrderCode } from "@/lib/order-code";
+import { cookies } from "next/headers";
 
 interface CreateSessionInput {
   customerName: string;
@@ -46,6 +47,18 @@ export async function createSession(
       .single();
 
     if (!insertError && session) {
+      try {
+        const cookieStore = await cookies();
+        cookieStore.set("active_session_id", session.id, {
+          path: "/",
+          maxAge: 60 * 60 * 24, // 24 hours
+          sameSite: "lax",
+          httpOnly: false,
+        });
+      } catch (e) {
+        console.error("Failed to set session cookie:", e);
+      }
+
       return {
         success: true,
         sessionId: session.id,
