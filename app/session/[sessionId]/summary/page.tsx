@@ -67,25 +67,25 @@ export default async function SummaryPage({ params }: PageProps) {
       <div className="bg-cafe-wallpaper" />
 
       {/* Floating White Card — Compact & Sleek */}
-      <div className="card-floating animate-slide-up" style={{ maxWidth: "380px" }}>
+      <div className="card-floating animate-slide-up" style={{ maxWidth: "360px", padding: "20px 20px" }}>
         {/* Header & Icon Row */}
-        <div style={{ textAlign: "center", marginBottom: "14px" }}>
+        <div style={{ textAlign: "center", marginBottom: "12px" }}>
           {/* 1. Top Title Text */}
           <h1
             style={{
-              fontSize: "1.2rem",
+              fontSize: "1.05rem",
               fontWeight: 800,
               color: isCancelled ? "#dc2626" : "#111827",
               letterSpacing: "0.02em",
               textTransform: "uppercase",
-              margin: "0 0 12px 0",
+              margin: "0 0 10px 0",
             }}
           >
             {isCancelled ? "PHIÊN ĐÃ ĐƯỢC HỦY" : "ĐÃ CHECKOUT THÀNH CÔNG"}
           </h1>
 
-          {/* 2. Icon below title with sparkle dashes (tua rua xích ra xa hình tròn) */}
-          <div style={{ position: "relative", width: "88px", height: "88px", margin: "0 auto 8px auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {/* 2. Icon below title with sparkle dashes (gọn gàng xinh xắn) */}
+          <div style={{ position: "relative", width: "72px", height: "72px", margin: "0 auto 8px auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {!isCancelled && (
               <svg
                 className="animate-sparkle"
@@ -96,7 +96,7 @@ export default async function SummaryPage({ params }: PageProps) {
                 strokeWidth="3.5"
                 strokeLinecap="round"
               >
-                {/* 8 tia phát sáng được đẩy lùi ra xa hình tròn (tính từ r=38 đến r=47) */}
+                {/* 8 tia phát sáng */}
                 <line x1="50" y1="3" x2="50" y2="11" />
                 <line x1="50" y1="89" x2="50" y2="97" />
                 <line x1="3" y1="50" x2="11" y2="50" />
@@ -111,8 +111,8 @@ export default async function SummaryPage({ params }: PageProps) {
             <div
               className="animate-pop-in"
               style={{
-                width: "52px",
-                height: "52px",
+                width: "44px",
+                height: "44px",
                 borderRadius: "50%",
                 backgroundColor: isCancelled ? "#fef2f2" : "#dcfce7",
                 display: "flex",
@@ -121,14 +121,14 @@ export default async function SummaryPage({ params }: PageProps) {
                 zIndex: 10,
                 boxShadow: isCancelled
                   ? "0 4px 12px rgba(220, 38, 38, 0.15)"
-                  : "0 6px 16px rgba(34, 197, 94, 0.22)",
+                  : "0 4px 14px rgba(34, 197, 94, 0.2)",
               }}
             >
               {isCancelled ? (
-                <span style={{ fontSize: "1.5rem", color: "#dc2626", fontWeight: 700 }}>✕</span>
+                <span style={{ fontSize: "1.2rem", color: "#dc2626", fontWeight: 700 }}>✕</span>
               ) : (
                 <svg
-                  style={{ width: "26px", height: "26px", color: "#16a34a" }}
+                  style={{ width: "22px", height: "22px", color: "#16a34a" }}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -143,7 +143,7 @@ export default async function SummaryPage({ params }: PageProps) {
           </div>
 
           {/* 3. Subtitle */}
-          <p style={{ fontSize: "0.85rem", color: "#6b7280", margin: 0, fontWeight: 500 }}>
+          <p style={{ fontSize: "0.8rem", color: "#6b7280", margin: 0, fontWeight: 500 }}>
             {isCancelled
               ? "Phiên dịch vụ này đã được hủy tại quầy."
               : "Cảm ơn bạn đã ghé quán hôm nay! ❤️"}
@@ -155,26 +155,26 @@ export default async function SummaryPage({ params }: PageProps) {
           style={{
             backgroundColor: "#f8fafc",
             border: "1px solid #e2e8f0",
-            borderRadius: "16px",
-            padding: "16px 18px",
-            marginBottom: "16px",
+            borderRadius: "14px",
+            padding: "12px 14px",
+            marginBottom: "14px",
           }}
         >
           {/* Total Amount Top Section */}
           <div
             style={{
               textAlign: "center",
-              marginBottom: "12px",
-              paddingBottom: "12px",
+              marginBottom: "10px",
+              paddingBottom: "10px",
               borderBottom: "1px dashed #cbd5e1",
             }}
           >
             <p
               style={{
-                fontSize: "0.75rem",
+                fontSize: "0.7rem",
                 color: "#64748b",
                 fontWeight: 600,
-                marginBottom: "4px",
+                marginBottom: "2px",
                 textTransform: "uppercase",
                 letterSpacing: "0.04em",
               }}
@@ -183,7 +183,7 @@ export default async function SummaryPage({ params }: PageProps) {
             </p>
             <p
               style={{
-                fontSize: "2.1rem",
+                fontSize: "1.65rem",
                 fontWeight: 900,
                 color: "#0f172a",
                 lineHeight: 1.1,
@@ -196,7 +196,7 @@ export default async function SummaryPage({ params }: PageProps) {
           </div>
 
           {/* Details Rows */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.84rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.8rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: "#64748b", fontWeight: 500 }}>Mã đơn</span>
               <span style={{ color: "#0f172a", fontWeight: 600 }}>{session.order_code}</span>
@@ -225,12 +225,12 @@ export default async function SummaryPage({ params }: PageProps) {
               backgroundColor: "#f0fdf4",
               border: "1px solid #bbf7d0",
               borderRadius: "12px",
-              padding: "10px 14px",
+              padding: "8px 12px",
               textAlign: "center",
-              fontSize: "0.84rem",
+              fontSize: "0.8rem",
               color: "#166534",
               fontWeight: 500,
-              margin: "0 0 20px 0",
+              margin: "0 0 16px 0",
               lineHeight: 1.4,
             }}
           >
@@ -244,8 +244,8 @@ export default async function SummaryPage({ params }: PageProps) {
           className="btn-black-pill"
           style={{
             width: "100%",
-            padding: "14px",
-            fontSize: "0.95rem",
+            padding: "12px",
+            fontSize: "0.88rem",
             fontWeight: 600,
             textAlign: "center",
             display: "block",
