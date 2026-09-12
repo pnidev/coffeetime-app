@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --bg-card: #ffffff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --color-green-bg: #dcfce7;
+  --color-green-icon: #22c55e;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html, body {
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f5f7;
+  color: var(--text-main);
+}
+
+/* Background wallpaper with coffee table image */
+.bg-cafe-wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/img/coffee_mobile.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .bg-cafe-wallpaper {
+    background-image: url('/img/coffee_desktop.jpg');
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Floating White Card matching screenshots exactly — centered with graceful margins */
+.card-floating {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 30px;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+  width: calc(100% - 32px);
+  max-width: 350px;
+  padding: 30px 24px;
+  position: relative;
+  z-index: 10;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .card-floating {
+    max-width: 390px;
+    padding: 36px 30px;
+    border-radius: 34px;
+  }
+}
+
+/* Black Pill Button */
+.btn-black-pill {
+  width: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.98rem;
+  padding: 15px 20px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-family: inherit;
+  line-height: 1.25;
+}
+
+.btn-black-pill:hover:not(:disabled) {
+  background-color: #1f2937;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.btn-black-pill:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-black-pill:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Light Gray Rounded Box */
+.box-light-gray {
+  background-color: #f3f4f6;
+  border-radius: 20px;
+}
+
+/* Form Input rounded light gray */
+.input-light-gray {
+  width: 100%;
+  background-color: #f3f4f6;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111827;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.input-light-gray:focus {
+  background-color: #ffffff;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.input-light-gray::placeholder {
+  color: #9ca3af;
+}
+
+/* Quick Select Chip */
+.chip-btn {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.chip-btn.active {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+/* Animations */
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up-fade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes checkmark-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-15deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-pop-in {
+  animation: checkmark-pop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-sparkle {
+  animation: sparkle-burst 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.05s forwards;
+}
+
+/* Data Table (for staff dashboard) */
+.staff-card {
+  background: rgba(26, 22, 18, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  color: #f3f4f6;
+}
+
+/* Print utility */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
