@@ -51,6 +51,62 @@ export default function CheckInClientForm() {
     checkActiveSession();
   }, []);
 
+  const [duplicateSession, setDuplicateSession] = useState<{
+    id: string;
+    orderCode: string;
+    customerName: string;
+    checkInTime: string;
+  } | null>(null);
+
+  async function handleConfirmResume() {
+    if (!duplicateSession) return;
+    setLoading(true);
+    setDuplicateSession(null);
+    try {
+      const res = await createSession({
+        customerName,
+        confirmResumeSessionId: duplicateSession.id,
+      });
+      if (res.success && res.sessionId) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("active_session_id", res.sessionId);
+          document.cookie = `active_session_id=${res.sessionId}; path=/; max-age=86400; SameSite=Lax; Secure`;
+        }
+        window.location.href = `/session/${res.sessionId}`;
+      } else {
+        setError(res.error || "Không thể nối lại phiên.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Lỗi kết nối.");
+      setLoading(false);
+    }
+  }
+
+  async function handleForceNew() {
+    setDuplicateSession(null);
+    setLoading(true);
+    try {
+      const res = await createSession({
+        customerName,
+        forceNew: true,
+      });
+      if (res.success && res.sessionId) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("active_session_id", res.sessionId);
+          document.cookie = `active_session_id=${res.sessionId}; path=/; max-age=86400; SameSite=Lax; Secure`;
+        }
+        window.location.href = `/session/${res.sessionId}`;
+      } else {
+        setError(res.error || "Lỗi tạo phiên mới.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Lỗi kết nối.");
+      setLoading(false);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     
@@ -78,6 +134,13 @@ export default function CheckInClientForm() {
       const result = await createSession({ customerName });
 
       if (!result.success) {
+        if (result.isDuplicateName && result.existingSession) {
+          setDuplicateSession(result.existingSession);
+          setLoading(false);
+          isSubmitting.current = false;
+          return;
+        }
+
         setError(result.error || "Hệ thống quá tải tạm thời. Vui lòng thử lại.");
         setLoading(false);
         isSubmitting.current = false;
@@ -242,6 +305,113 @@ export default function CheckInClientForm() {
           <strong style={{ color: "#111827", fontWeight: 700 }}>30.000đ</strong> / 4h đầu (+30.000đ mỗi 4h tiếp theo)
         </div>
       </div>
+
+      {/* Duplicate Session Modal */}
+      {duplicateSession && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="animate-slide-up"
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: "24px",
+              padding: "28px 24px",
+              width: "100%",
+              maxWidth: "360px",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                backgroundColor: "#eff6ff",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 16px auto",
+                fontSize: "1.4rem",
+              }}
+            >
+              🔍
+            </div>
+
+            <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#111827", marginBottom: "8px" }}>
+              Tìm thấy phiên đang chạy!
+            </h3>
+            <p style={{ fontSize: "0.88rem", color: "#4b5563", lineHeight: 1.45, marginBottom: "16px" }}>
+              Tên <strong style={{ color: "#111827" }}>&quot;{duplicateSession.customerName}&quot;</strong> đang có một phiên đếm giờ hoạt động trên hệ thống (mã <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{duplicateSession.orderCode}</span>).
+            </p>
+
+            <div
+              style={{
+                backgroundColor: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderRadius: "14px",
+                padding: "12px 14px",
+                marginBottom: "20px",
+                fontSize: "0.82rem",
+                color: "#334155",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ margin: "0 0 4px 0" }}>
+                📌 <strong>Đây có phải là phiên của bạn không?</strong>
+              </p>
+              <p style={{ margin: 0, color: "#64748b" }}>
+                Nếu bạn lỡ đóng tab hoặc quét lại QR, bấm tiếp tục để mở lại đồng hồ. Nếu bạn là khách mới, bấm tạo phiên mới.
+              </p>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <button
+                onClick={handleConfirmResume}
+                disabled={loading}
+                className="btn-black-pill"
+                style={{
+                  width: "100%",
+                  padding: "13px",
+                  fontSize: "0.9rem",
+                  fontWeight: 600,
+                }}
+              >
+                {loading ? "Đang xử lý..." : "Đúng vậy, mở lại đồng hồ"}
+              </button>
+
+              <button
+                onClick={handleForceNew}
+                disabled={loading}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: "9999px",
+                  backgroundColor: "#f3f4f6",
+                  color: "#374151",
+                  fontWeight: 600,
+                  fontSize: "0.88rem",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Tôi là khách mới (Tạo phiên mới)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

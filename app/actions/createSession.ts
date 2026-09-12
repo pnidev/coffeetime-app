@@ -8,6 +8,15 @@ import { cookies } from "next/headers";
 
 interface CreateSessionInput {
   customerName: string;
+  confirmResumeSessionId?: string;
+  forceNew?: boolean;
+}
+
+interface ExistingSessionInfo {
+  id: string;
+  orderCode: string;
+  customerName: string;
+  checkInTime: string;
 }
 
 interface CreateSessionResult {
@@ -15,12 +24,14 @@ interface CreateSessionResult {
   sessionId?: string;
   orderCode?: string;
   error?: string;
+  isDuplicateName?: boolean;
+  existingSession?: ExistingSessionInfo;
 }
 
 export async function createSession(
   input: CreateSessionInput
 ): Promise<CreateSessionResult> {
-  const { customerName } = input;
+  const { customerName, confirmResumeSessionId, forceNew } = input;
 
   // Validate
   if (!customerName || customerName.trim().length === 0) {
@@ -30,36 +41,59 @@ export async function createSession(
   const supabase = createServiceClient();
   const trimmedName = customerName.trim();
 
-  // 1. Kiểm tra xem khách hàng có cùng tên đang có phiên chạy (active) hay không
-  // Rất hữu ích cho iOS Camera app / Zalo private webview khi bị xóa bộ nhớ đệm
-  const { data: existingActive } = await supabase
-    .from("sessions")
-    .select("id, order_code")
-    .eq("status", "active")
-    .ilike("customer_name", trimmedName)
-    .order("check_in_time", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  // TH 1: Khách hàng xác nhận tiếp tục phiên cũ
+  if (confirmResumeSessionId) {
+    const { data: matched } = await supabase
+      .from("sessions")
+      .select("id, order_code, status")
+      .eq("id", confirmResumeSessionId)
+      .single();
 
-  if (existingActive) {
-    try {
-      const cookieStore = await cookies();
-      cookieStore.set("active_session_id", existingActive.id, {
-        path: "/",
-        maxAge: 60 * 60 * 24, // 24 hours
-        sameSite: "lax",
-        secure: true,
-        httpOnly: false,
-      });
-    } catch (e) {
-      console.error("Failed to set session cookie:", e);
+    if (matched && matched.status === "active") {
+      try {
+        const cookieStore = await cookies();
+        cookieStore.set("active_session_id", matched.id, {
+          path: "/",
+          maxAge: 60 * 60 * 24, // 24 hours
+          sameSite: "lax",
+          secure: true,
+          httpOnly: false,
+        });
+      } catch (e) {
+        console.error("Failed to set session cookie:", e);
+      }
+
+      return {
+        success: true,
+        sessionId: matched.id,
+        orderCode: matched.order_code,
+      };
     }
+  }
 
-    return {
-      success: true,
-      sessionId: existingActive.id,
-      orderCode: existingActive.order_code,
-    };
+  // TH 2: Nếu chưa ép buộc tạo mới (forceNew != true), kiểm tra xem có phiên trùng tên đang chạy không
+  if (!forceNew) {
+    const { data: existingActive } = await supabase
+      .from("sessions")
+      .select("id, order_code, customer_name, check_in_time")
+      .eq("status", "active")
+      .ilike("customer_name", trimmedName)
+      .order("check_in_time", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existingActive) {
+      return {
+        success: false,
+        isDuplicateName: true,
+        existingSession: {
+          id: existingActive.id,
+          orderCode: existingActive.order_code,
+          customerName: existingActive.customer_name,
+          checkInTime: existingActive.check_in_time,
+        },
+      };
+    }
   }
 
   // Sinh mã đơn, retry nếu trùng (cực hiếm)
