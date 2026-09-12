@@ -222,12 +222,12 @@ export default function SessionPage({ params }: PageProps) {
       {/* Floating White Card — Chuẩn 100% tinh tế, không rườm rà */}
       <div className="card-floating animate-slide-up">
         {/* Top Header Row */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px", marginBottom: "20px" }}>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <h1 style={{ fontSize: "1.35rem", fontWeight: 700, color: "#111827", lineHeight: 1.2, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <h1 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#111827", lineHeight: 1.2, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               CoffeeShop
             </h1>
-            <p style={{ fontSize: "0.85rem", color: "#6b7280", fontWeight: 500, marginTop: "2px", marginBottom: 0 }}>
+            <p style={{ fontSize: "0.8rem", color: "#6b7280", fontWeight: 500, marginTop: "2px", marginBottom: 0 }}>
               Đã check-in
             </p>
           </div>
@@ -238,19 +238,19 @@ export default function SessionPage({ params }: PageProps) {
                 backgroundColor: "#fffbe5",
                 color: "#b45309",
                 border: "1px solid #fde68a",
-                padding: "6px 12px",
+                padding: "4px 10px",
                 borderRadius: "9999px",
-                fontSize: "0.75rem",
+                fontSize: "0.72rem",
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
-                gap: "5px",
+                gap: "4px",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
                 cursor: "pointer",
               }}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#d97706", flexShrink: 0 }} />
+              <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#d97706", flexShrink: 0 }} />
               Mất kết nối ⓘ
             </button>
           ) : (
@@ -259,57 +259,57 @@ export default function SessionPage({ params }: PageProps) {
                 backgroundColor: "#dcfce7",
                 color: "#15803d",
                 border: "1px solid #bbf7d0",
-                padding: "6px 12px",
+                padding: "4px 10px",
                 borderRadius: "9999px",
-                fontSize: "0.75rem",
+                fontSize: "0.72rem",
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
-                gap: "5px",
+                gap: "4px",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
               }}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#16a34a", flexShrink: 0 }} />
+              <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#16a34a", flexShrink: 0 }} />
               Đang tính giờ
             </div>
           )}
         </div>
 
-        {/* Time & Money Metric Columns — Chuẩn chỉnh không bao giờ bị rớt dòng */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", marginBottom: "24px" }}>
+        {/* Time & Money Metric Columns — Thiết kế nhỏ gọn sang trọng */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "10px", marginBottom: "20px" }}>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <p style={{ fontSize: "0.82rem", color: "#6b7280", fontWeight: 500, marginBottom: "4px", whiteSpace: "nowrap" }}>
+            <p style={{ fontSize: "0.78rem", color: "#6b7280", fontWeight: 500, marginBottom: "3px", whiteSpace: "nowrap" }}>
               Thời gian đã dùng
             </p>
-            <p style={{ fontSize: "1.25rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+            <p style={{ fontSize: "1.1rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
               {durationDisplay}
             </p>
           </div>
 
           <div style={{ textAlign: "right", minWidth: 0, flex: 1 }}>
-            <p style={{ fontSize: "0.82rem", color: "#6b7280", fontWeight: 500, marginBottom: "4px", textAlign: "right", whiteSpace: "nowrap" }}>
+            <p style={{ fontSize: "0.78rem", color: "#6b7280", fontWeight: 500, marginBottom: "3px", textAlign: "right", whiteSpace: "nowrap" }}>
               Số tiền
             </p>
-            <p style={{ fontSize: "1.25rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", textAlign: "right", whiteSpace: "nowrap" }}>
+            <p style={{ fontSize: "1.1rem", fontWeight: 700, color: "#111827", lineHeight: 1.1, letterSpacing: "-0.01em", textAlign: "right", whiteSpace: "nowrap" }}>
               {formatCurrency(previewPrice)}
             </p>
           </div>
         </div>
 
-        {/* Order Code Row — Viền rõ ràng, font đồng bộ */}
+        {/* Order Code Row — Thanh mảnh gọn gàng */}
         <div
           style={{
             backgroundColor: "#f8fafc",
             border: "1px solid #e2e8f0",
-            borderRadius: "14px",
-            padding: "14px 18px",
-            marginBottom: "24px",
+            borderRadius: "12px",
+            padding: "10px 14px",
+            marginBottom: "20px",
             textAlign: "left",
           }}
         >
-          <p style={{ fontSize: "0.9rem", color: "#374151", margin: 0, fontWeight: 500 }}>
-            Mã đơn hàng: <span style={{ color: "#111827", fontWeight: 500 }}>{session.order_code}</span>
+          <p style={{ fontSize: "0.82rem", color: "#4b5563", margin: 0, fontWeight: 500 }}>
+            Mã đơn hàng: <span style={{ color: "#111827", fontWeight: 600 }}>{session.order_code}</span>
           </p>
         </div>
 
@@ -318,13 +318,13 @@ export default function SessionPage({ params }: PageProps) {
           <div
             role="alert"
             style={{
-              padding: "12px 16px",
-              borderRadius: "14px",
+              padding: "10px 14px",
+              borderRadius: "12px",
               backgroundColor: "#fef2f2",
               border: "1px solid #fecaca",
               color: "#dc2626",
-              fontSize: "0.88rem",
-              marginBottom: "20px",
+              fontSize: "0.82rem",
+              marginBottom: "16px",
               textAlign: "center",
               fontWeight: 500,
             }}
@@ -341,8 +341,8 @@ export default function SessionPage({ params }: PageProps) {
           className="btn-black-pill"
           style={{
             width: "100%",
-            padding: "17px",
-            fontSize: "1rem",
+            padding: "13px",
+            fontSize: "0.9rem",
             fontWeight: 600,
           }}
         >
