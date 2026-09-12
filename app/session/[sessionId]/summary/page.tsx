@@ -10,6 +10,8 @@ interface PageProps {
   params: Promise<{ sessionId: string }>;
 }
 
+import { ClearActiveSession } from "./ClearActiveSession";
+
 export default async function SummaryPage({ params }: PageProps) {
   const { sessionId } = await params;
   const supabase = createServiceClient();
@@ -63,6 +65,7 @@ export default async function SummaryPage({ params }: PageProps) {
 
   return (
     <main className="relative min-h-[100dvh] w-full flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+      <ClearActiveSession />
       {/* Background Wallpaper Image */}
       <div className="bg-cafe-wallpaper" />
 

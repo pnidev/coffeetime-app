@@ -3,7 +3,8 @@
 // Màn hình khách quét QR → nhập tên → bắt đầu tính giờ
 // Giao diện thoáng đạt, rộng rãi, không bị dồn chữ, KHÔNG dùng dấu chấm trong thông tin giá
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { createSession } from "@/app/actions/createSession";
 
 export default function CheckInPage() {
@@ -11,6 +12,38 @@ export default function CheckInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const isSubmitting = useRef(false);
+
+  // Tự động khôi phục phiên nếu khách mở lại trình duyệt hoặc quét lại QR trong khi phiên chưa kết thúc
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const savedSessionId = localStorage.getItem("active_session_id");
+    if (!savedSessionId) return;
+
+    // Kiểm tra trạng thái phiên trên Supabase
+    async function checkActiveSession() {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("sessions")
+          .select("status")
+          .eq("id", savedSessionId)
+          .single();
+
+        if (data && data.status === "active") {
+          // Phiên vẫn đang chạy -> tự động chuyển khách về màn hình tính giờ ngay!
+          window.location.href = `/session/${savedSessionId}`;
+        } else {
+          // Phiên đã xong hoặc không tồn tại -> xóa bộ nhớ đệm
+          localStorage.removeItem("active_session_id");
+        }
+      } catch {
+        // Lỗi kết nối -> giữ nguyên
+      }
+    }
+
+    checkActiveSession();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,6 +76,10 @@ export default function CheckInPage() {
         setLoading(false);
         isSubmitting.current = false;
         return;
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("active_session_id", result.sessionId!);
       }
 
       window.location.href = `/session/${result.sessionId}`;

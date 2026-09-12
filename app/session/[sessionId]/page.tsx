@@ -83,8 +83,15 @@ export default function SessionPage({ params }: PageProps) {
         }
 
         if (data.status === "completed" || data.status === "cancelled") {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("active_session_id");
+          }
           window.location.href = `/session/${sessionId}/summary`;
           return;
+        }
+
+        if (typeof window !== "undefined") {
+          localStorage.setItem("active_session_id", data.id);
         }
 
         setSession(data as SessionData);
@@ -116,6 +123,9 @@ export default function SessionPage({ params }: PageProps) {
         setIsOffline(false);
 
         if (data && data.status !== "active") {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("active_session_id");
+          }
           window.location.href = `/session/${sessionId}/summary`;
         }
       } catch (err) {
@@ -137,6 +147,9 @@ export default function SessionPage({ params }: PageProps) {
         (payload) => {
           const updated = payload.new as SessionData;
           if (updated.status === "completed" || updated.status === "cancelled") {
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("active_session_id");
+            }
             window.location.href = `/session/${sessionId}/summary`;
           }
         }
@@ -179,6 +192,9 @@ export default function SessionPage({ params }: PageProps) {
       return;
     }
 
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("active_session_id");
+    }
     window.location.href = `/session/${session.id}/summary`;
   }, [session, ending]);
 
